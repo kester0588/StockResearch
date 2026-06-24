@@ -1,7 +1,8 @@
-<!DOCTYPE html>
-<!-- saved from url=(0053)file:///C:/Users/nc-sc/Downloads/StockResearch_1.html -->
-<html lang="de"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -211,8 +212,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <span class="topbar-sub">Konzentriertes Depot · max. 15 Positionen</span>
   <div class="topbar-spacer"></div>
   <div class="view-tabs">
-    <button class="view-tab on" id="tab-research" onclick="switchView(&#39;research&#39;)">📊 Research</button>
-    <button class="view-tab" id="tab-intel" onclick="switchView(&#39;intel&#39;)">📋 Intel Feed</button>
+    <button class="view-tab on" id="tab-research" onclick="switchView('research')">📊 Research</button>
+    <button class="view-tab" id="tab-intel" onclick="switchView('intel')">📋 Intel Feed</button>
   </div>
 </div>
 
@@ -231,10 +232,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
     <div class="sbs">
       <div class="sbl">Meine Thesen</div>
-      <button class="tb" id="tb-agi" onclick="flt(&#39;agi&#39;)"><div class="tbdot" style="background:#378ADD"></div>AGI Infrastructure</button>
-      <button class="tb" id="tb-wave" onclick="flt(&#39;wave&#39;)"><div class="tbdot" style="background:#1D9E75"></div>Wave 3 Effizienz</button>
-      <button class="tb" id="tb-mega" onclick="flt(&#39;mega&#39;)"><div class="tbdot" style="background:#BA7517"></div>Megatrend Bottleneck</button>
-      <button class="tb" id="tb-quantum" onclick="flt(&#39;quantum&#39;)"><div class="tbdot" style="background:#7F77DD"></div>Quantum Computing</button>
+      <button class="tb" id="tb-agi" onclick="flt('agi')"><div class="tbdot" style="background:#378ADD"></div>AGI Infrastructure</button>
+      <button class="tb" id="tb-wave" onclick="flt('wave')"><div class="tbdot" style="background:#1D9E75"></div>Wave 3 Effizienz</button>
+      <button class="tb" id="tb-mega" onclick="flt('mega')"><div class="tbdot" style="background:#BA7517"></div>Megatrend Bottleneck</button>
+      <button class="tb" id="tb-quantum" onclick="flt('quantum')"><div class="tbdot" style="background:#7F77DD"></div>Quantum Computing</button>
     </div>
     <div style="padding:12px 16px;margin-top:auto;border-top:1px solid var(--bd);font-size:11px;color:var(--tx3);line-height:1.7">
       <strong style="color:var(--tx2)">So funktioniert es:</strong><br>
@@ -245,7 +246,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
     <div style="padding:10px 16px;border-top:1px solid var(--bd);display:flex;gap:6px;">
       <button onclick="exportData()" style="flex:1;padding:7px 8px;background:var(--navy);color:#fff;border:none;border-radius:var(--rs);font-size:11px;font-weight:600;cursor:pointer;">💾 Backup</button>
-      <button onclick="document.getElementById(&#39;importfile&#39;).click()" style="flex:1;padding:7px 8px;background:transparent;color:var(--tx2);border:1px solid var(--bd2);border-radius:var(--rs);font-size:11px;font-weight:600;cursor:pointer;">📂 Wiederherstellen</button>
+      <button onclick="document.getElementById('importfile').click()" style="flex:1;padding:7px 8px;background:transparent;color:var(--tx2);border:1px solid var(--bd2);border-radius:var(--rs);font-size:11px;font-weight:600;cursor:pointer;">📂 Wiederherstellen</button>
       <input type="file" id="importfile" accept=".json" style="display:none" onchange="importData(event)">
     </div>
   </div>
@@ -276,7 +277,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="promptbox-txt" id="prompttxt"></div>
       <div class="promptbox-row">
         <button class="cpbtn" id="cpbtn">Kopieren</button>
-        <button class="dsbtn" onclick="document.getElementById(&#39;promptbox&#39;).style.display=&#39;none&#39;">Schließen</button>
+        <button class="dsbtn" onclick="document.getElementById('promptbox').style.display='none'">Schließen</button>
       </div>
     </div>
     <div class="pastebox">
@@ -838,6 +839,5 @@ document.getElementById('clbtn').onclick=function(){document.getElementById('pta
 renderSb();
 Object.values(anls).forEach(function(d){if(d&&d.ticker)buildCard(d);});
 </script>
-
-
-</body></html>
+</body>
+</html>
