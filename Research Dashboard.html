@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)file:///C:/Users/nc-sc/Downloads/research-dashboard_3.html -->
+<html lang="de"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Research Dashboard">
+<meta name="theme-color" content="#1a1a2e">
+<title>Research Dashboard</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f5f3;--sur:#fff;--sur2:#f0efed;
+  --bd:rgba(0,0,0,.10);--bd2:rgba(0,0,0,.20);
+  --tx:#1a1a1a;--tx2:#6b6b6b;--tx3:#a0a09a;
+  --navy:#1a1a2e;--green:#0F6E56;--gbg:#E1F5EE;--gtx:#085041;
+  --amber:#BA7517;--abg:#FAEEDA;--atx:#633806;
+  --blue:#185FA5;--bbg:#E6F1FB;--btx:#0C447C;
+  --pbg:#EEEDFE;--ptx:#3C3489;
+  --red:#A32D2D;--rbg:#FCEBEB;
+  --r:10px;--rs:6px
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#18181a;--sur:#242428;--sur2:#2e2e32;
+  --bd:rgba(255,255,255,.09);--bd2:rgba(255,255,255,.18);
+  --tx:#f0f0ee;--tx2:#9a9a94;--tx3:#5a5a56
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);font-size:14px;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.topbar{display:flex;align-items:center;gap:12px;padding:0 20px;background:var(--navy);color:#fff;height:52px;flex-shrink:0}
+.logo{width:22px;height:22px;border:2px solid #4fc3f7;border-radius:4px;transform:rotate(45deg);flex-shrink:0}
+.topbar h1{font-size:15px;font-weight:600}
+.nav-tabs{display:flex;gap:4px;margin-left:auto}
+.nav-tab{padding:6px 16px;border:none;background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);border-radius:var(--rs);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s}
+.nav-tab:hover{background:rgba(255,255,255,.2);color:#fff}
+.nav-tab.on{background:rgba(255,255,255,.25);color:#fff;font-weight:600}
+.view{flex:1;overflow-y:auto;display:none}
+.view.on{display:block}
+.view-inner{max-width:980px;margin:0 auto;padding:24px 28px}
+/* Section tabs */
+.section-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--bd);align-items:center}
+.stab{padding:7px 16px;border:none;background:var(--sur);border:1px solid var(--bd);color:var(--tx2);border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s}
+.stab:hover{border-color:var(--navy);color:var(--navy)}
+.stab.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.stab-del{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;margin-left:5px;border-radius:50%;background:rgba(255,255,255,.2);font-size:10px;cursor:pointer;line-height:1}
+.stab-del:hover{background:var(--red);color:#fff}
+/* Upload area */
+.upload-zone{border:2px dashed var(--bd2);border-radius:var(--r);padding:28px;text-align:center;cursor:pointer;transition:all .2s;background:var(--sur);margin-bottom:20px}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--navy);background:var(--bbg)}
+.upload-zone-icon{font-size:36px;margin-bottom:10px;opacity:.4}
+.upload-zone h3{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:4px}
+.upload-zone p{font-size:12px;color:var(--tx3)}
+.upload-zone input{display:none}
+.upload-progress{background:var(--bbg);border:1px solid #b5d4f4;border-radius:var(--rs);padding:12px 16px;margin-bottom:16px;display:none}
+.upload-progress p{font-size:13px;color:var(--btx);margin-bottom:8px}
+.upload-bar{height:4px;background:#b5d4f4;border-radius:2px;overflow:hidden}
+.upload-bar-fill{height:100%;background:var(--blue);border-radius:2px;transition:width .3s;width:0%}
+/* Content area */
+.tab-content{display:none}
+.tab-content.on{display:block}
+/* Section heading */
+.view-header{margin-bottom:20px}
+.view-header h2{font-size:22px;font-weight:700;color:var(--tx)}
+.view-header p{font-size:13px;color:var(--tx2);margin-top:4px}
+/* Shared section styles */
+.s-h1{font-size:22px;font-weight:700;color:var(--tx);margin-bottom:6px}
+.s-sub{font-size:13px;color:var(--tx2);margin-bottom:12px;line-height:1.6}
+.s-section{margin-bottom:22px}
+.s-section-title{font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--navy)}
+.s-card{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);padding:14px 18px;margin-bottom:10px}
+.s-card-title{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:6px}
+.s-text{font-size:13px;color:var(--tx);line-height:1.75}
+.s-text p{margin-bottom:8px}
+.s-text ul{padding-left:16px;margin:4px 0}
+.s-text li{margin-bottom:4px}
+.s-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.s-badge-pro{display:inline-block;font-size:11px;padding:1px 6px;border-radius:3px;background:var(--gbg);color:var(--gtx);font-weight:600}
+.s-badge-con{display:inline-block;font-size:11px;padding:1px 6px;border-radius:3px;background:var(--rbg);color:var(--red);font-weight:600}
+.s-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:4px}
+.s-table th{background:var(--sur2);padding:8px 12px;text-align:left;font-weight:600;color:var(--tx2);font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+.s-table td{padding:8px 12px;border-bottom:1px solid var(--bd);color:var(--tx);vertical-align:top}
+.s-table tr:last-child td{border-bottom:none}
+.s-scenario{border-radius:var(--rs);padding:12px 16px;margin-bottom:8px}
+.s-scenario.base{background:var(--bbg);border-left:4px solid var(--blue)}
+.s-scenario.bull{background:var(--gbg);border-left:4px solid var(--green)}
+.s-scenario.bear{background:var(--rbg);border-left:4px solid var(--red)}
+.s-scenario-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.s-scenario.base .s-scenario-label{color:var(--blue)}
+.s-scenario.bull .s-scenario-label{color:var(--green)}
+.s-scenario.bear .s-scenario-label{color:var(--red)}
+/* Empty state */
+.empty-state{text-align:center;padding:60px 20px;color:var(--tx2)}
+.empty-state-icon{font-size:48px;margin-bottom:16px;opacity:.2}
+.empty-state h3{font-size:17px;font-weight:500;color:var(--tx);margin-bottom:8px}
+.empty-state p{font-size:13px;line-height:1.65;max-width:360px;margin:0 auto}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:3px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo"></div>
+  <h1>Research Dashboard</h1>
+  <div class="nav-tabs">
+    <button class="nav-tab on" onclick="switchView(&#39;sector&#39;)">🌐 Sektorenanalyse &amp; Markttrends</button>
+    <button class="nav-tab" onclick="switchView(&#39;deep&#39;)">🔮 Aktienanalysen</button>
+  </div>
+</div>
+
+<!-- SEKTOR VIEW -->
+<div class="view on" id="view-sector">
+  <div class="view-inner">
+    <div class="section-tabs" id="sector-tabs">
+      <button class="stab on" data-id="crypto" onclick="switchSector(&#39;crypto&#39;,this)">₿ Crypto</button>
+      <label class="stab" style="cursor:pointer" title="Neue Analyse hochladen">
+        + Neue Analyse
+        <input type="file" id="sector-upload" accept=".txt,.docx,.doc,.pdf" style="display:none" onchange="handleUpload(event,&#39;sector&#39;)">
+      </label>
+    </div>
+    <div id="sector-content">
+
+  <div class="s-h1">₿ Kryptowährungen — Analyse &amp; Ausblick</div>
+  <div class="s-sub">Überblick: Kryptowährungen befinden sich in einer Schwächephase, wahrscheinlich aufgrund des KI-Trends. Was spricht dafür, dass sie wieder an Fahrt gewinnen — und wie wahrscheinlich ist eine Erholung?</div>
+  <div style="font-size:11px;color:var(--tx3);margin-bottom:20px;">Analysestand: 24.06.2026</div>
+
+  <div class="s-section"><div class="s-section-title">Kurzantwort</div>
+    <div class="s-card"><div class="s-text"><p>Kryptowährungen könnten wieder an Fahrt gewinnen, wenn sich makroökonomische Bedingungen entspannen, institutionelle Zuflüsse steigen und die Verbindung zu neuen Trends wie KI und Tokenisierung echten Nutzen schafft. Die Wahrscheinlichkeit einer Erholung ist hoch — aber mit typischer Volatilität und starken Abhängigkeiten von Regulierung und Marktzyklen.</p></div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Gründe für eine mögliche Erholung</div>
+    <div class="s-card"><div class="s-card-title">1. Institutionelle Nachfrage &amp; ETFs</div><div class="s-text">Bitcoin-ETFs haben bereits über 60 Mrd. USD eingesammelt. Analysten erwarten weitere Zuflüsse von Pensionsfonds und Versicherungen. Das stärkt die Marktstruktur und reduziert extreme Volatilität.</div></div>
+    <div class="s-card"><div class="s-card-title">2. Regulatorische Klarheit</div><div class="s-text">In den USA und Europa (MiCA-Regulierung) entstehen klare Rahmenbedingungen. Ab 1. Juli 2026 gilt MiCAR EU-weit. 200 von 2.700 Krypto-Firmen haben bisher eine Lizenz — massive Marktbereinigung. Anleger müssen prüfen, ob ihre Börse im ESMA- oder BaFin-Register steht.</div></div>
+    <div class="s-card"><div class="s-card-title">3. Technologische Weiterentwicklung</div><div class="s-text">Ethereum mit Proof-of-Stake und Layer-2-Lösungen, neue Protokolle für DeFi, Zahlungen und Datenmärkte — echte Anwendungsfälle schaffen strukturellen Wert. Tokenisierung bereits Realität: Franklin Templeton, Ondo Finance, Backed Finance nutzen Ethereum für tokenisierte Staatsanleihen.</div></div>
+    <div class="s-card"><div class="s-card-title">4. KI-Trend als Treiber</div><div class="s-text">KI-Coins wie Near Protocol oder Venice profitieren vom Boom rund um KI-Agenten. Die Verbindung von Blockchain und KI (dezentrale Rechenleistung, Datenmärkte, autonome Agenten) könnte ein neues Narrativ für Kapitalzuflüsse sein.</div></div>
+    <div class="s-card"><div class="s-card-title">5. Marktzyklen &amp; Anlegerverhalten</div><div class="s-text">Viele Anleger kaufen antizyklisch („Buy the Dip“). Studien zeigen, dass selbst beim Crash Anfang 2026 über 50% der deutschen Investoren Positionen aufgestockt haben.</div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Treiber vs. Risiken</div>
+    <table class="s-table"><thead><tr><th>Faktor</th><th>Chancen (Pro)</th><th>Risiken (Contra)</th></tr></thead><tbody>
+      <tr><td>Institutionelle ETFs</td><td><span class="s-badge-pro">+</span> Stabile Nachfrage, Liquidität</td><td><span class="s-badge-con">−</span> Abhängigkeit von Regulierung</td></tr>
+      <tr><td>Regulierung</td><td><span class="s-badge-pro">+</span> Klarheit, Schutz für Anleger</td><td><span class="s-badge-con">−</span> Verzögerungen, Einschränkungen</td></tr>
+      <tr><td>Technologie</td><td><span class="s-badge-pro">+</span> DeFi, Tokenisierung, KI-Integration</td><td><span class="s-badge-con">−</span> Konkurrenz, hohe Gebühren</td></tr>
+      <tr><td>Makroökonomie</td><td><span class="s-badge-pro">+</span> Niedrige Zinsen, Liquidität</td><td><span class="s-badge-con">−</span> Rezession, Risikoaversion</td></tr>
+      <tr><td>Anlegerverhalten</td><td><span class="s-badge-pro">+</span> Buy-the-Dip-Mentalität</td><td><span class="s-badge-con">−</span> Panikverkäufe bei Schocks</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Szenarien bis Ende 2026</div>
+    <div class="s-scenario base"><div class="s-scenario-label">📊 Base Case (wahrscheinlich)</div><div class="s-text">Konsolidierung mit moderaten Gewinnen. Bitcoin 60.000–100.000 USD, Ethereum 2.000–5.000 USD bis Ende 2026.</div></div>
+    <div class="s-scenario bull"><div class="s-scenario-label">🚀 Bull Case (optimistisch)</div><div class="s-text">Starke ETF-Zuflüsse, KI-Narrativ zieht Kapital an → Bitcoin 150.000–200.000 USD, Ethereum 7.000–8.000 USD.</div></div>
+    <div class="s-scenario bear"><div class="s-scenario-label">⚠ Bear Case (pessimistisch)</div><div class="s-text">Rezession, harte Regulierung, Kapitalflucht → Bitcoin zurück Richtung 40.000–50.000 USD.</div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Szenario-Analyse bis 2030</div>
+    <div class="s-scenario bull"><div class="s-scenario-label">🚀 1. Optimistisches Szenario — Mainstream-Integration</div><div class="s-text"><p>ETFs, Banken und Versicherungen integrieren Krypto als Anlageklasse. Aktien, Anleihen und Immobilien werden auf Blockchains abgebildet. KI-Blockchain-Synergie: Dezentrale Datenmärkte nutzen Kryptowährungen.</p><p><strong>Ergebnis: Bitcoin ~150.000 USD, Ethereum ~8.000 USD, breite Akzeptanz als Infrastruktur-Asset.</strong></p></div></div>
+    <div class="s-scenario base"><div class="s-scenario-label">📊 2. Basisszenario — Selektive Etablierung</div><div class="s-text"><p>Klare Regeln in USA/EU schaffen Vertrauen. Ethereum und Layer-2-Lösungen setzen sich durch. KI, DeFi und Tokenisierung bleiben Nischen mit realen Anwendungen.</p><p><strong>Ergebnis: Bitcoin 60.000–100.000 USD, Ethereum 3.000–5.000 USD. Etabliert als alternative Anlageklasse.</strong></p></div></div>
+    <div class="s-scenario bear"><div class="s-scenario-label">⚠ 3. Pessimistisches Szenario — Fragmentierung</div><div class="s-text"><p>Strenge Eingriffe, viele Projekte scheitern, Rezession, KI-Integration bleibt Hype.</p><p><strong>Ergebnis: Bitcoin 40.000–50.000 USD, Ethereum unter 2.000 USD. Krypto bleibt Nischenmarkt.</strong></p></div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Trendwechsel: KI → Krypto</div>
+    <div class="s-card"><div class="s-text"><p>Damit ein Trendwechsel entsteht, müssten KI-Narrative an Strahlkraft verlieren, während Kryptowährungen durch regulatorische Klarheit, technologische Durchbrüche und institutionelle Nachfrage neue Relevanz gewinnen.</p><p><strong>Bremsfaktoren KI:</strong> Ab 2029 sollen KI-gesteuerte Investments stärker reguliert werden. Wenn KI-Modelle nicht skalierbar oder zu teuer bleiben, könnte die Euphorie abflachen.</p><p><strong>Stärkung Krypto:</strong> Vollständige MiCA-Umsetzung schafft Rechtssicherheit. ETFs und Custody-Lösungen ziehen Pensionsfonds an. Tokenisierung von RWAs und CBDCs (digitaler Euro ab 2028) schaffen reale Anwendungsfälle.</p></div></div>
+    <table class="s-table"><thead><tr><th>Faktor</th><th>KI-Trend (heute stark)</th><th>Krypto-Trend (zukünftig möglich)</th></tr></thead><tbody>
+      <tr><td>Narrativ</td><td>Produktivität, Automatisierung</td><td>Dezentralisierung, digitale Assets</td></tr>
+      <tr><td>Regulierung</td><td>Zunehmend strenger</td><td>Klarer Rahmen durch MiCA</td></tr>
+      <tr><td>Kapital</td><td>Venture Capital, Hardware</td><td>ETFs, institutionelle Anleger</td></tr>
+      <tr><td>Anwendung</td><td>Datenanalyse, Agenten</td><td>Tokenisierung, DeFi, Stablecoins</td></tr>
+      <tr><td>Risiken</td><td>Überhitzung, hohe Kosten</td><td>Volatilität, Hacks, Compliance</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Aktuelle Marktlage (Juni 2026)</div>
+    <div class="s-card"><div class="s-card-title">1. Regulatorische Klarheit (MiCA)</div><div class="s-text">Ab 1. Juli 2026 gilt MiCAR EU-weit. In Deutschland endete die Übergangsfrist Ende 2025. 200 von 2.700 Krypto-Firmen haben Lizenz — massive Marktbereinigung. Nicht lizenzierte Anbieter verschwinden.</div></div>
+    <div class="s-card"><div class="s-card-title">2. Institutionelle Adoption</div><div class="s-text"><p>Tokenisierte Real World Assets (RWA): Statt einem Papierdokument bekommt man einen digitalen Token, der Zinsen zahlt. Mit dem Handy kleine Stücke von Anleihen oder Immobilien kaufen.</p><p>Bitcoin lag Ende 2025 bei ca. 94.250 USD. Erste CBDC-Pilotprojekte laufen — vollständige Einführung digitaler Euro ab 2028 erwartet.</p></div></div>
+    <div class="s-card"><div class="s-card-title">3. Technologische Innovation</div><div class="s-text"><p><strong>Tokenisierung:</strong> Mit 100€ besitzt du ein Stück eines Einkaufszentrums und bekommst anteilige Miete.</p><p><strong>Layer-2:</strong> Schnellstraße die den Verkehr entlastet. Zahlungen laufen flüssiger und günstiger als auf der Hauptblockchain.</p></div></div>
+    <div class="s-card"><div class="s-card-title">4. Sicherheitsfortschritte</div><div class="s-text"><p><strong>Proof-of-Reserves:</strong> Jeder kann sehen, dass die Börse wirklich die Coins hat — kein blindes Vertrauen nötig.</p><p><strong>On-chain Risk Tools:</strong> Warnsysteme die Alarm schlagen wenn etwas verdächtig ist.</p></div></div>
+    <table class="s-table" style="margin-top:10px"><thead><tr><th>Bereich</th><th>Chancen</th><th>Risiken</th></tr></thead><tbody>
+      <tr><td>Regulierung (MiCA)</td><td><span class="s-badge-pro">+</span> Einheitlicher EU-Rahmen</td><td><span class="s-badge-con">−</span> Hohe Eintrittsbarrieren</td></tr>
+      <tr><td>Institutionelle Adoption</td><td><span class="s-badge-pro">+</span> Kapitalzuflüsse durch ETFs</td><td><span class="s-badge-con">−</span> Compliance-Abhängigkeit</td></tr>
+      <tr><td>Tokenisierung</td><td><span class="s-badge-pro">+</span> Reale Cashflows, neue Use-Cases</td><td><span class="s-badge-con">−</span> Verzögerungen bei Einführung</td></tr>
+      <tr><td>Sicherheit</td><td><span class="s-badge-pro">+</span> Mehr Transparenz</td><td><span class="s-badge-con">−</span> Kostenintensiv</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Die wichtigsten Kryptowährungen erklärt</div>
+    <div class="s-card"><div class="s-card-title">₿ Bitcoin (BTC) — Das digitale Gold</div><div class="s-text"><p>Wie Gold im Tresor — zahlt keine Zinsen, dient als Wertaufbewahrung. Knapp, dezentral, unabhängig von Staaten. Als Absicherung gegen Inflation wenn Vertrauen in klassische Währungen sinkt.</p></div></div>
+    <div class="s-card"><div class="s-card-title">Ξ Ethereum (ETH) — Das Betriebssystem</div><div class="s-text"><p>Ethereum ist wie das „Windows“ der Blockchain-Welt. <strong>Wichtig: Ethereum ≠ Ether.</strong> Ethereum = Plattform (wie das Auto), Ether = Treibstoff (wie Benzin). Fast alle Tokenisierungen laufen über Ethereum. Ethereum hält ~16,4 Mrd. USD an tokenisierten RWAs (~54% Marktanteil). Beispiele: BlackRock (BUIDL), Franklin Templeton (BENJI), Ondo Finance.</p></div></div>
+    <div class="s-card"><div class="s-card-title">XRP (Ripple) — Die Brückenwährung</div><div class="s-text"><p>XRP ist wie ein Blitzüberweisungssystem zwischen Banken — günstiger als SWIFT. Stärke bei internationalen Zahlungen über Ländergrenzen (Europa → Asien, Afrika). <strong>Innerhalb Europas macht XRP wenig Sinn</strong> — SEPA Instant erledigt das bereits in Sekunden. Stablecoin RLUSD mit 1,76 Mrd. USD Umlaufmenge stärkt das Netzwerk.</p></div></div>
+    <div class="s-card"><div class="s-card-title">🏦 Canton Network — Das institutionelle Backbone</div><div class="s-text"><p>Verwaltet über 336 Mrd. USD an RWAs (85% Marktanteil institutionell). Infrastruktur für Banken und Fonds — nicht für Retail. Ethereum und Canton entwickeln sich nebeneinander, nicht gegeneinander.</p></div></div>
+    <table class="s-table" style="margin-top:10px"><thead><tr><th>Kriterium</th><th>Ethereum (öffentlich)</th><th>Canton (institutionell)</th></tr></thead><tbody>
+      <tr><td>Marktvolumen 2026</td><td>~16,4 Mrd. USD RWAs</td><td>~336 Mrd. USD RWAs</td></tr>
+      <tr><td>Nutzerbasis</td><td>Retail und Institutionen</td><td>Nur Banken und Fonds</td></tr>
+      <tr><td>Vorteile</td><td><span class="s-badge-pro">+</span> Frei handelbar, liquide, offen</td><td><span class="s-badge-pro">+</span> Reguliert, kontrolliert, Privacy</td></tr>
+      <tr><td>Nachteile</td><td><span class="s-badge-con">−</span> Volatilität, Gebühren</td><td><span class="s-badge-con">−</span> Nicht frei handelbar</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Layer-2 Kryptowährungen erklärt</div>
+    <div class="s-card"><div class="s-text"><p><strong>Was ist Layer-2?</strong> Layer-1 = Hauptnetzwerk (Ethereum, Bitcoin). Layer-2 = Zusatzschicht die Transaktionen bündelt und günstig verarbeitet. Wie eine Schnellstraße neben der überfüllten Autobahn.</p><p>Ethereum schafft nur ~15 Transaktionen pro Sekunde — Layer-2 kann Tausende abwickeln. Gebühren auf Layer-2 oft nur Bruchteile von Cent statt mehrere Dollar.</p></div></div>
+    <table class="s-table"><thead><tr><th>Layer-2 Projekt</th><th>Typ</th><th>Nutzen</th></tr></thead><tbody>
+      <tr><td>Arbitrum</td><td>Optimistic Rollup</td><td>Sehr günstige Transaktionen, beliebt für DeFi</td></tr>
+      <tr><td>Optimism</td><td>Optimistic Rollup</td><td>Skalierung für Ethereum-Apps</td></tr>
+      <tr><td>Polygon</td><td>Sidechain / Rollup</td><td>Große Nutzerbasis, viele Partnerschaften</td></tr>
+      <tr><td>zkSync</td><td>Zero-Knowledge Rollup</td><td>Sehr schnelle, sichere Transaktionen</td></tr>
+      <tr><td>Lightning Network</td><td>Payment Channel (Bitcoin)</td><td>Sofortige, günstige Bitcoin-Zahlungen</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Stablecoins — Wettbewerb und Zukunft</div>
+    <div class="s-card"><div class="s-text"><p><strong>XRP vs. RLUSD:</strong> XRP ist die Kryptowährung (Wert schwankt, Brückenfunktion). RLUSD ist der Stablecoin (1:1 an USD gekoppelt, stabil). XRP = Schnellzug, RLUSD = Fahrgäste mit festen Tickets.</p></div></div>
+    <table class="s-table"><thead><tr><th>Stablecoin</th><th>Stärken</th><th>Schwächen</th></tr></thead><tbody>
+      <tr><td>USDT (Tether)</td><td>Größter Stablecoin, hohe Liquidität</td><td>Transparenz der Reserven kritisiert</td></tr>
+      <tr><td>USDC (Circle)</td><td>Reguliert, institutionell sehr beliebt</td><td>Abhängig von US-Regulierung</td></tr>
+      <tr><td>RLUSD (Ripple)</td><td>Wächst stark im Ripple-Ökosystem</td><td>Noch kleiner als Marktführer</td></tr>
+      <tr><td>DAI (MakerDAO)</td><td>Dezentral, durch Krypto besichert</td><td>Komplexer, weniger liquide</td></tr>
+      <tr><td>CBDCs (dig. Euro)</td><td>Staatlich gesichert</td><td>Noch in Entwicklung</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Weitere Krypto-Kategorien</div>
+    <table class="s-table"><thead><tr><th>Kategorie</th><th>Beispiele</th><th>Nutzen im Alltag</th></tr></thead><tbody>
+      <tr><td>Wertspeicher</td><td>Bitcoin</td><td>Inflationsschutz, Referenzwert</td></tr>
+      <tr><td>Smart Contracts</td><td>Ethereum, Solana</td><td>Tokenisierung, DeFi, Apps</td></tr>
+      <tr><td>Skalierung</td><td>Polygon, Arbitrum, Optimism, zkSync</td><td>Schnelle und günstige Transaktionen</td></tr>
+      <tr><td>Zahlungen</td><td>USDC, USDT, RLUSD</td><td>Preisstabil, global nutzbar</td></tr>
+      <tr><td>DeFi und Tokenisierung</td><td>Aave, MakerDAO, Ondo Finance</td><td>Kredite, Zinsen ohne Banken</td></tr>
+      <tr><td>Gaming / NFTs</td><td>Immutable X, Sandbox</td><td>Digitale Güter und Spiele</td></tr>
+      <tr><td>Privacy Coins</td><td>Monero, Zcash</td><td>Anonyme Zahlungen</td></tr>
+    </tbody></table>
+  </div>
+
+  <div style="font-size:11px;color:var(--tx3);margin-top:16px;padding-top:12px;border-top:1px solid var(--bd)">Analysestand: 24.06.2026 · Quelle: Eigene Analyse (Christof Schneider)</div>
+
+</div>
+  </div>
+</div>
+
+<!-- AKTIEN VIEW -->
+<div class="view" id="view-deep">
+  <div class="view-inner">
+    <div class="section-tabs" id="deep-tabs">
+      <button class="stab on" data-id="abnb" onclick="switchDeep(&#39;abnb&#39;,this)">✈ Airbnb (ABNB)</button>
+      <label class="stab" style="cursor:pointer" title="Neue Aktienanalyse hochladen">
+        + Neue Analyse
+        <input type="file" id="deep-upload" accept=".txt,.docx,.doc,.pdf" style="display:none" onchange="handleUpload(event,&#39;deep&#39;)">
+      </label>
+    </div>
+    <div id="deep-content">
+
+  <div class="s-h1">Airbnb, Inc. (ABNB) — Tiefenanalyse</div>
+  <div class="s-sub">Umfassende Analyse des Geschäftsmodells, Wettbewerbs, Finanzkennzahlen und Zukunftsstrategie</div>
+  <div style="font-size:11px;color:var(--tx3);margin-bottom:20px;">Analysestand: 24.06.2026</div>
+
+  <div class="s-section"><div class="s-section-title">Das Geschäftsmodell — Der digitale Vermittler</div>
+    <div class="s-card"><div class="s-text"><p>Airbnb betreibt selbst keine Hotels oder Ferienwohnungen. Das Unternehmen nutzt ein <strong>Asset-Light-Geschäftsmodell</strong> — es fungiert als digitaler zweiseitiger Marktplatz, der private und gewerbliche Gastgeber (Hosts) mit Reisenden (Guests) zusammenbringt.</p><p><strong>Das Kernprinzip: Umsatz durch Servicegebühren</strong><br>Vom Gastgeber: ca. 3% des Buchungspreises. Vom Gast: meist unter 14,2% des Buchungswertes. Dieser Asset-Light-Ansatz macht das Geschäftsmodell extrem kapitaleffizient.</p></div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Die 3 Kernsegmente</div>
+    <div class="s-card"><div class="s-card-title">1. Unterkünfte (Accommodations) — Das Hauptsegment</div><div class="s-text"><p>Das fundamentale Kerngeschäft, schätzungsweise über 95% des Umsatzes. Im Jahr 2025 wurden 507 Millionen Übernachtungen gebucht. ADR weltweit bei rund 173 USD.</p><p><strong>Beispiele:</strong><br>• <em>Zimmer (Private Rooms):</em> Ein Student in Berlin vermietet während der Semesterferien sein WG-Zimmer an einen Wochenendtouristen.<br>• <em>Gesamte Unterkunft (Entire Homes):</em> Eine Familie aus München vermietet ihr Einfamilienhaus für zwei Wochen im Sommer.<br>• <em>Besondere Unterkünfte:</em> Ein Winzer in der Toskana bietet ein ausgebautes Baumhaus auf seinem Weinberg an.</p></div></div>
+    <div class="s-card"><div class="s-card-title">2. Airbnb Erlebnisse (Experiences) — Das Erlebnissegment</div><div class="s-text"><p>Erweitert das Reisen vom reinen Übernachten hin zu Aktivitäten. Lokale Experten bieten kostenpflichtige Aktivitäten an. Airbnb behält eine höhere Kommission (rund 20%). Geringeres Buchungsvolumen, aber deutlich höhere Take-Rate als Unterkünfte.</p><p><strong>Beispiele:</strong><br>• Ein Koch in Tokio bietet einen dreistündigen Sushi-Zubereitungskurs für maximal vier Touristen an.<br>• Ein Historiker aus Edinburgh führt eine virtuelle Tour durch die Geistergeschichten Schottlands.</p></div></div>
+    <div class="s-card"><div class="s-card-title">3. Airbnb Icons — Das Marketing-Premiumprodukt</div><div class="s-text"><p>2024 eingeführtes Segment, verbindet reale Unterkünfte mit Popkultur, Film und Musik. Dient primär als massives Marketinginstrument. Beispiel: Ein Nachbau des Hauses aus dem Pixar-Film wurde für wenige Nächte in New Mexico zur Buchung freigegeben.</p><p><strong>Finanzielle Bedeutung:</strong> Generiert kaum direkten Umsatz, aber enormen Marketingwert — zieht Millionen Menschen auf die App, die dann reguläre Unterkünfte buchen.</p></div></div>
+    <div class="s-card"><div class="s-card-title">Warum funktioniert dieses Modell? — Der Netzwerkeffekt</div><div class="s-text"><p>Je mehr Gastgeber einzigartige Unterkünfte anbieten, desto mehr Gäste nutzen die App. Je mehr Gäste suchen, desto attraktiver wird es für neue Gastgeber. Airbnb muss im Verhältnis zu traditionellen Hotelketten kaum Geld für physische Infrastruktur ausgeben.</p></div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Geografische Umsatzverteilung (FY 2025)</div>
+    <table class="s-table"><thead><tr><th>Region</th><th>Charakteristik</th><th>Wachstum</th></tr></thead><tbody>
+      <tr><td>Nordamerika</td><td>Reifster Markt mit den höchsten Tagesraten (ADR)</td><td>Stabil</td></tr>
+      <tr><td>EMEA (Europa, Nahost, Afrika)</td><td>Starker klassischer Städtetourismus</td><td><span class="s-badge-pro">+14% YoY</span></td></tr>
+      <tr><td>Lateinamerika</td><td>Am schnellsten wachsender Markt</td><td><span class="s-badge-pro">+20% YoY</span></td></tr>
+      <tr><td>Asien-Pazifik</td><td>Erholt sich durch asiatischen Auslandstourismus</td><td>Schrittweise</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Wettbewerb — Stärken und Schwächen</div>
+    <table class="s-table"><thead><tr><th>Kriterium</th><th>Airbnb</th><th>Booking Holdings</th><th>Expedia/Vrbo</th></tr></thead><tbody>
+      <tr><td>Markenbekanntheit</td><td><span class="s-badge-pro">Verb geworden, organisch</span></td><td>Global stark</td><td>Solide USA</td></tr>
+      <tr><td>Marketing-Kosten</td><td><span class="s-badge-pro">90% Traffic organisch</span></td><td><span class="s-badge-con">Milliarden Google Ads</span></td><td>Hoch</td></tr>
+      <tr><td>Unterkunftstypen</td><td><span class="s-badge-pro">Einzigartig, Baumhäuser, Burgen</span></td><td>Hauptsächlich Hotels</td><td>Ferienhäuser Familien</td></tr>
+      <tr><td>Regulierungsrisiko</td><td><span class="s-badge-con">Hoch (NYC, Barcelona)</span></td><td>Gering (Hotels lizenziert)</td><td>Mittel</td></tr>
+      <tr><td>Komplettreise</td><td><span class="s-badge-con">Nur Unterkunft (bisher)</span></td><td><span class="s-badge-pro">Flug, Hotel, Mietwagen</span></td><td>Mittel</td></tr>
+      <tr><td>Qualitätsstandard</td><td><span class="s-badge-con">Inkonsistent</span></td><td>Standardisiert</td><td>Standardisiert</td></tr>
+    </tbody></table>
+    <div class="s-card" style="margin-top:10px"><div class="s-card-title">Was kann Airbnb BESSER als die Konkurrenz?</div><div class="s-text"><ul style="padding-left:16px;line-height:1.9"><li><strong>Die Marke als Verb:</strong> Menschen sagen „ich airbnbe“ — über 90% des Traffics fließt organisch ohne bezahlte Werbung. Booking und Expedia müssen jährlich Milliarden für Google-Anzeigen ausgeben.</li><li><strong>Einzigartigkeit des Portfolios:</strong> Baumhäuser, Burgen, Weinberge — auf klassischen Hotelportalen nicht vorhanden.</li><li><strong>Vertrauen:</strong> Das zweiseitige Bewertungssystem schafft hohe soziale Kontrolle für beide Seiten.</li><li><strong>Höhere Kundenbindung bei Jüngeren:</strong> Generationen Y und Z präferieren individuelle Erlebnisse gegenüber standardisierten Hotelzimmern.</li></ul></div></div>
+    <div class="s-card"><div class="s-card-title">Was kann Airbnb SCHLECHTER als die Konkurrenz?</div><div class="s-text"><ul style="padding-left:16px;line-height:1.9"><li><strong>Regulierungsanfälligkeit:</strong> Strikte Gesetze in NYC, Barcelona, Amsterdam beschneiden das Wachstumspotenzial abrupt.</li><li><strong>Qualitätsinkonsistenz:</strong> Versteckte Mängel, komplizierter Check-in, kurzfristige Absagen durch Hosts.</li><li><strong>Gebührentransparenz:</strong> Endpreise inklusive Reinigungsgebühren wirken intransparent im Vergleich zu Festpreisen bei Hotels.</li><li><strong>Fehlendes Komplettangebot:</strong> Booking bietet Flüge, Mietwagen, Taxis und Hotels aus einer Hand.</li></ul></div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Finanzkennzahlen 2021–2025</div>
+    <table class="s-table"><thead><tr><th>Jahr</th><th>Umsatz (Mrd. USD)</th><th>Nettogewinn (Mrd. USD)</th><th>FCF (Mrd. USD)</th></tr></thead><tbody>
+      <tr><td>2021</td><td>5,99</td><td>-0,35</td><td>0,80</td></tr>
+      <tr><td>2022</td><td>8,40</td><td>1,89</td><td>2,64</td></tr>
+      <tr><td>2023</td><td>9,92</td><td>4,79</td><td>2,87</td></tr>
+      <tr><td>2024</td><td>11,10</td><td>2,65</td><td>3,15</td></tr>
+      <tr><td>2025</td><td>12,24</td><td>2,51</td><td>3,54</td></tr>
+    </tbody></table>
+    <div class="s-card" style="margin-top:10px"><div class="s-card-title">Bewertungsmultiplikatoren (Mitte 2026)</div><div class="s-text"><p><strong>KGV ~35x</strong> — Faire Prämie für Marktführerschaft. Leicht über dem Niveau von 2024 (31,1x).</p><p><strong>KUV:</strong> Sinkt seit Jahren kontinuierlich (2021: 13,7x) — die Aktie wird fundamental günstiger.</p><p><strong>FCF-Marge: 28,9%</strong> (3,54 Mrd. USD FCF auf 12,24 Mrd. USD Umsatz) — strukturell deutlich profitabler als die GuV ausweist.</p><p><strong>Nettorendite: ~20%</strong> — Jeder fünfte eingenommene Dollar bleibt als reiner Gewinn.</p></div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Direktvergleich: Airbnb vs. Booking Holdings (FY 2025)</div>
+    <table class="s-table"><thead><tr><th>Kennzahl</th><th>Airbnb (ABNB)</th><th>Booking Holdings (BKNG)</th></tr></thead><tbody>
+      <tr><td>Umsatz</td><td>12,24 Mrd. USD</td><td>&gt;20 Mrd. USD (mehr als doppelt)</td></tr>
+      <tr><td>KGV</td><td>~33,5x</td><td>~22,1x <span class="s-badge-pro">günstiger</span></td></tr>
+      <tr><td>FCF-Marge</td><td><span class="s-badge-pro">~28,9% (höher)</span></td><td>~25%</td></tr>
+      <tr><td>Marketing-Kosten</td><td><span class="s-badge-pro">Gering (organisch)</span></td><td><span class="s-badge-con">Hoch (Google-abhängig)</span></td></tr>
+      <tr><td>Regulierungsrisiko</td><td><span class="s-badge-con">Hoch</span></td><td>Gering</td></tr>
+      <tr><td>Bilanz</td><td>Solide Eigenkapitalbasis</td><td>Negatives EK durch Rückkäufe</td></tr>
+    </tbody></table>
+    <div class="s-card" style="margin-top:10px"><div class="s-card-title">Fazit für Investoren</div><div class="s-text"><p>Investieren Sie in <strong>Airbnb</strong>, wenn Sie an die Stärke einer globalen Lifestyle-Marke glauben und darauf setzen, dass das Management das Regulierungsrisiko durch Langzeitmieten kompensieren kann.</p><p>Investieren Sie in <strong>Booking</strong>, wenn Sie ein klassisches, stabiles Value-Investment im Tourismussektor suchen, das weniger anfällig für politische Verbote ist.</p></div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Zukunftsstrategie des Managements (5 Säulen)</div>
+    <div class="s-card"><div class="s-card-title">1. Vom reinen Vermieter zur umfassenden Reiseplattform</div><div class="s-text"><p>Integration von Flughafentransfers, Mietwagen, Gepäckaufbewahrung und Lebensmittellieferungen direkt in den Buchungsprozess. Neue Kategorien: Boutique-Hotels, Bed &amp; Breakfasts und verifizierte Premium-Unterkünfte.</p></div></div>
+    <div class="s-card"><div class="s-card-title">2. Radikaler Wandel durch KI (AI-First)</div><div class="s-text"><p>Bereits rund 60% des Programmiercodes bei Airbnb werden von KI geschrieben — senkt Kosten pro Buchung drastisch. Geplant ist ein hyper-personalisiertes Such- und Buchungssystem als digitaler Reisebegleiter.</p></div></div>
+    <div class="s-card"><div class="s-card-title">3. Geografische Expansion in Wachstumsmärkte</div><div class="s-text"><p>Fokus auf Brasilien, Japan und Indien — um das Übernachtungswachstum wieder in den zweistelligen Prozentbereich zu treiben.</p></div></div>
+    <div class="s-card"><div class="s-card-title">4. Langzeitmieten &amp; Lifestyle</div><div class="s-text"><p>Buchungen über 28 Tage (für digitale Nomaden und Remote-Worker) werden ausgebaut. Über „Airbnb-Friendly Apartments“ arbeitet das Management direkt mit Immobilienentwicklern zusammen.</p></div></div>
+    <div class="s-card"><div class="s-card-title">5. Das Vertrauens-Flywheel &amp; Großevents</div><div class="s-text"><p>FIFA Fußball-Weltmeisterschaft 2026 in Nordamerika als globaler Hebel — enorme Nachfragewelle da Hotelkapazitäten in den 17 Austragungsstädten knapp sind. Aufbau eines Co-Hosting-Netzwerks.</p></div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Risikoprofil — Was könnte das Modell stoppen?</div>
+    <div class="s-scenario bear"><div class="s-scenario-label">⚠ 1. Die Welle der globalen Regulierung (Der politische Tod)</div><div class="s-text">Wenn der Trend von Einzelverboten (New York, Barcelona) flächendeckend auf mittlere Städte überspringt, bricht das Angebot weg. EU- oder US-weite Gesetze die Kurzzeitvermietungen an teure Hotel-Lizenzen koppeln, würden über Nacht Millionen Inserate vernichten.</div></div>
+    <div class="s-scenario bear"><div class="s-scenario-label">⚠ 2. Das Ende der Gebührenakzeptanz (Der ökonomische Tod)</div><div class="s-text">Wenn Hotels durch Automatisierung ihre Preise dauerhaft senken, wird Airbnb schlicht zu teuer. Sobald Reisende feststellen, dass ein Hotelzimmer günstiger, sauberer und unkomplizierter ist, versiegt der Kundenstrom.</div></div>
+    <div class="s-scenario bear"><div class="s-scenario-label">⚠ 3. Der Verlust der Such-Hoheit an Google (Der technologische Tod)</div><div class="s-text">Aktuell profitiert Airbnb davon, dass 90% der Kunden direkt die App öffnen. Wenn Google Travel so optimiert wird, dass Urlauber direkt dort buchen, wird Airbnb zum reinen Zulieferer herabgestuft.</div></div>
+    <div class="s-scenario bear"><div class="s-scenario-label">⚠ 4. Ein irreparabler Vertrauensbruch (Der soziale Tod)</div><div class="s-text">Das Modell basiert zu 100% auf Vertrauen. Eine Serie von schweren, weltweit medial ausgeschlachteten Sicherheitsvorfällen würde Hosts und Gäste massenhaft zu sicheren Hotelketten treiben.</div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Szenarioanalyse: Wann ist die Aktie historisch günstig?</div>
+    <div class="s-sub" style="margin-bottom:12px">Aktueller Kurs ~144 USD, EPS ~4,06 USD. Historische KGV-Spanne seit Börsengang: 28x bis 45x.</div>
+    <div class="s-scenario base"><div class="s-scenario-label">📊 Fairmarktige Bewertung (KGV 35x)</div><div class="s-text">Aktienkurs ~144 USD. Unternehmen ist solide bepreist, bietet jedoch wenig Sicherheitsmarge. Das aktuelle Niveau.</div></div>
+    <div class="s-scenario bull"><div class="s-scenario-label">✓ Historisch günstig (KGV 28x)</div><div class="s-text">Aktienkurs ~113,60 USD. Nahe dem 52-Wochen-Tief (110,81 USD). Ab hier ist die Aktie fundamental historisch günstig und bietet eine starke Sicherheitsmarge.</div></div>
+    <div class="s-scenario bear"><div class="s-scenario-label">⚠ Marktkrise (KGV 22x wie Booking)</div><div class="s-text">Aktienkurs ~89,30 USD. Würde eintreten, wenn das Wachstum temporär komplett stagniert und Airbnb auf das Bewertungsniveau von Booking herabgestuft wird.</div></div>
+  </div>
+
+  <div style="font-size:11px;color:var(--tx3);margin-top:16px;padding-top:12px;border-top:1px solid var(--bd)">Analysestand: 24.06.2026 · Quelle: Eigene Analyse (Christof Schneider)</div>
+
+</div>
+  </div>
+</div>
+
+<!-- HIDDEN CONTENT -->
+<div style="display:none" id="da-crypto-content">
+
+  <div class="s-h1">₿ Kryptowährungen — Analyse &amp; Ausblick</div>
+  <div class="s-sub">Überblick: Kryptowährungen befinden sich in einer Schwächephase, wahrscheinlich aufgrund des KI-Trends. Was spricht dafür, dass sie wieder an Fahrt gewinnen — und wie wahrscheinlich ist eine Erholung?</div>
+  <div style="font-size:11px;color:var(--tx3);margin-bottom:20px;">Analysestand: 24.06.2026</div>
+
+  <div class="s-section"><div class="s-section-title">Kurzantwort</div>
+    <div class="s-card"><div class="s-text"><p>Kryptowährungen könnten wieder an Fahrt gewinnen, wenn sich makroökonomische Bedingungen entspannen, institutionelle Zuflüsse steigen und die Verbindung zu neuen Trends wie KI und Tokenisierung echten Nutzen schafft. Die Wahrscheinlichkeit einer Erholung ist hoch — aber mit typischer Volatilität und starken Abhängigkeiten von Regulierung und Marktzyklen.</p></div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Gründe für eine mögliche Erholung</div>
+    <div class="s-card"><div class="s-card-title">1. Institutionelle Nachfrage &amp; ETFs</div><div class="s-text">Bitcoin-ETFs haben bereits über 60 Mrd. USD eingesammelt. Analysten erwarten weitere Zuflüsse von Pensionsfonds und Versicherungen. Das stärkt die Marktstruktur und reduziert extreme Volatilität.</div></div>
+    <div class="s-card"><div class="s-card-title">2. Regulatorische Klarheit</div><div class="s-text">In den USA und Europa (MiCA-Regulierung) entstehen klare Rahmenbedingungen. Ab 1. Juli 2026 gilt MiCAR EU-weit. 200 von 2.700 Krypto-Firmen haben bisher eine Lizenz — massive Marktbereinigung. Anleger müssen prüfen, ob ihre Börse im ESMA- oder BaFin-Register steht.</div></div>
+    <div class="s-card"><div class="s-card-title">3. Technologische Weiterentwicklung</div><div class="s-text">Ethereum mit Proof-of-Stake und Layer-2-Lösungen, neue Protokolle für DeFi, Zahlungen und Datenmärkte — echte Anwendungsfälle schaffen strukturellen Wert. Tokenisierung bereits Realität: Franklin Templeton, Ondo Finance, Backed Finance nutzen Ethereum für tokenisierte Staatsanleihen.</div></div>
+    <div class="s-card"><div class="s-card-title">4. KI-Trend als Treiber</div><div class="s-text">KI-Coins wie Near Protocol oder Venice profitieren vom Boom rund um KI-Agenten. Die Verbindung von Blockchain und KI (dezentrale Rechenleistung, Datenmärkte, autonome Agenten) könnte ein neues Narrativ für Kapitalzuflüsse sein.</div></div>
+    <div class="s-card"><div class="s-card-title">5. Marktzyklen &amp; Anlegerverhalten</div><div class="s-text">Viele Anleger kaufen antizyklisch („Buy the Dip“). Studien zeigen, dass selbst beim Crash Anfang 2026 über 50% der deutschen Investoren Positionen aufgestockt haben.</div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Treiber vs. Risiken</div>
+    <table class="s-table"><thead><tr><th>Faktor</th><th>Chancen (Pro)</th><th>Risiken (Contra)</th></tr></thead><tbody>
+      <tr><td>Institutionelle ETFs</td><td><span class="s-badge-pro">+</span> Stabile Nachfrage, Liquidität</td><td><span class="s-badge-con">−</span> Abhängigkeit von Regulierung</td></tr>
+      <tr><td>Regulierung</td><td><span class="s-badge-pro">+</span> Klarheit, Schutz für Anleger</td><td><span class="s-badge-con">−</span> Verzögerungen, Einschränkungen</td></tr>
+      <tr><td>Technologie</td><td><span class="s-badge-pro">+</span> DeFi, Tokenisierung, KI-Integration</td><td><span class="s-badge-con">−</span> Konkurrenz, hohe Gebühren</td></tr>
+      <tr><td>Makroökonomie</td><td><span class="s-badge-pro">+</span> Niedrige Zinsen, Liquidität</td><td><span class="s-badge-con">−</span> Rezession, Risikoaversion</td></tr>
+      <tr><td>Anlegerverhalten</td><td><span class="s-badge-pro">+</span> Buy-the-Dip-Mentalität</td><td><span class="s-badge-con">−</span> Panikverkäufe bei Schocks</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Szenarien bis Ende 2026</div>
+    <div class="s-scenario base"><div class="s-scenario-label">📊 Base Case (wahrscheinlich)</div><div class="s-text">Konsolidierung mit moderaten Gewinnen. Bitcoin 60.000–100.000 USD, Ethereum 2.000–5.000 USD bis Ende 2026.</div></div>
+    <div class="s-scenario bull"><div class="s-scenario-label">🚀 Bull Case (optimistisch)</div><div class="s-text">Starke ETF-Zuflüsse, KI-Narrativ zieht Kapital an → Bitcoin 150.000–200.000 USD, Ethereum 7.000–8.000 USD.</div></div>
+    <div class="s-scenario bear"><div class="s-scenario-label">⚠ Bear Case (pessimistisch)</div><div class="s-text">Rezession, harte Regulierung, Kapitalflucht → Bitcoin zurück Richtung 40.000–50.000 USD.</div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Szenario-Analyse bis 2030</div>
+    <div class="s-scenario bull"><div class="s-scenario-label">🚀 1. Optimistisches Szenario — Mainstream-Integration</div><div class="s-text"><p>ETFs, Banken und Versicherungen integrieren Krypto als Anlageklasse. Aktien, Anleihen und Immobilien werden auf Blockchains abgebildet. KI-Blockchain-Synergie: Dezentrale Datenmärkte nutzen Kryptowährungen.</p><p><strong>Ergebnis: Bitcoin ~150.000 USD, Ethereum ~8.000 USD, breite Akzeptanz als Infrastruktur-Asset.</strong></p></div></div>
+    <div class="s-scenario base"><div class="s-scenario-label">📊 2. Basisszenario — Selektive Etablierung</div><div class="s-text"><p>Klare Regeln in USA/EU schaffen Vertrauen. Ethereum und Layer-2-Lösungen setzen sich durch. KI, DeFi und Tokenisierung bleiben Nischen mit realen Anwendungen.</p><p><strong>Ergebnis: Bitcoin 60.000–100.000 USD, Ethereum 3.000–5.000 USD. Etabliert als alternative Anlageklasse.</strong></p></div></div>
+    <div class="s-scenario bear"><div class="s-scenario-label">⚠ 3. Pessimistisches Szenario — Fragmentierung</div><div class="s-text"><p>Strenge Eingriffe, viele Projekte scheitern, Rezession, KI-Integration bleibt Hype.</p><p><strong>Ergebnis: Bitcoin 40.000–50.000 USD, Ethereum unter 2.000 USD. Krypto bleibt Nischenmarkt.</strong></p></div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Trendwechsel: KI → Krypto</div>
+    <div class="s-card"><div class="s-text"><p>Damit ein Trendwechsel entsteht, müssten KI-Narrative an Strahlkraft verlieren, während Kryptowährungen durch regulatorische Klarheit, technologische Durchbrüche und institutionelle Nachfrage neue Relevanz gewinnen.</p><p><strong>Bremsfaktoren KI:</strong> Ab 2029 sollen KI-gesteuerte Investments stärker reguliert werden. Wenn KI-Modelle nicht skalierbar oder zu teuer bleiben, könnte die Euphorie abflachen.</p><p><strong>Stärkung Krypto:</strong> Vollständige MiCA-Umsetzung schafft Rechtssicherheit. ETFs und Custody-Lösungen ziehen Pensionsfonds an. Tokenisierung von RWAs und CBDCs (digitaler Euro ab 2028) schaffen reale Anwendungsfälle.</p></div></div>
+    <table class="s-table"><thead><tr><th>Faktor</th><th>KI-Trend (heute stark)</th><th>Krypto-Trend (zukünftig möglich)</th></tr></thead><tbody>
+      <tr><td>Narrativ</td><td>Produktivität, Automatisierung</td><td>Dezentralisierung, digitale Assets</td></tr>
+      <tr><td>Regulierung</td><td>Zunehmend strenger</td><td>Klarer Rahmen durch MiCA</td></tr>
+      <tr><td>Kapital</td><td>Venture Capital, Hardware</td><td>ETFs, institutionelle Anleger</td></tr>
+      <tr><td>Anwendung</td><td>Datenanalyse, Agenten</td><td>Tokenisierung, DeFi, Stablecoins</td></tr>
+      <tr><td>Risiken</td><td>Überhitzung, hohe Kosten</td><td>Volatilität, Hacks, Compliance</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Aktuelle Marktlage (Juni 2026)</div>
+    <div class="s-card"><div class="s-card-title">1. Regulatorische Klarheit (MiCA)</div><div class="s-text">Ab 1. Juli 2026 gilt MiCAR EU-weit. In Deutschland endete die Übergangsfrist Ende 2025. 200 von 2.700 Krypto-Firmen haben Lizenz — massive Marktbereinigung. Nicht lizenzierte Anbieter verschwinden.</div></div>
+    <div class="s-card"><div class="s-card-title">2. Institutionelle Adoption</div><div class="s-text"><p>Tokenisierte Real World Assets (RWA): Statt einem Papierdokument bekommt man einen digitalen Token, der Zinsen zahlt. Mit dem Handy kleine Stücke von Anleihen oder Immobilien kaufen.</p><p>Bitcoin lag Ende 2025 bei ca. 94.250 USD. Erste CBDC-Pilotprojekte laufen — vollständige Einführung digitaler Euro ab 2028 erwartet.</p></div></div>
+    <div class="s-card"><div class="s-card-title">3. Technologische Innovation</div><div class="s-text"><p><strong>Tokenisierung:</strong> Mit 100€ besitzt du ein Stück eines Einkaufszentrums und bekommst anteilige Miete.</p><p><strong>Layer-2:</strong> Schnellstraße die den Verkehr entlastet. Zahlungen laufen flüssiger und günstiger als auf der Hauptblockchain.</p></div></div>
+    <div class="s-card"><div class="s-card-title">4. Sicherheitsfortschritte</div><div class="s-text"><p><strong>Proof-of-Reserves:</strong> Jeder kann sehen, dass die Börse wirklich die Coins hat — kein blindes Vertrauen nötig.</p><p><strong>On-chain Risk Tools:</strong> Warnsysteme die Alarm schlagen wenn etwas verdächtig ist.</p></div></div>
+    <table class="s-table" style="margin-top:10px"><thead><tr><th>Bereich</th><th>Chancen</th><th>Risiken</th></tr></thead><tbody>
+      <tr><td>Regulierung (MiCA)</td><td><span class="s-badge-pro">+</span> Einheitlicher EU-Rahmen</td><td><span class="s-badge-con">−</span> Hohe Eintrittsbarrieren</td></tr>
+      <tr><td>Institutionelle Adoption</td><td><span class="s-badge-pro">+</span> Kapitalzuflüsse durch ETFs</td><td><span class="s-badge-con">−</span> Compliance-Abhängigkeit</td></tr>
+      <tr><td>Tokenisierung</td><td><span class="s-badge-pro">+</span> Reale Cashflows, neue Use-Cases</td><td><span class="s-badge-con">−</span> Verzögerungen bei Einführung</td></tr>
+      <tr><td>Sicherheit</td><td><span class="s-badge-pro">+</span> Mehr Transparenz</td><td><span class="s-badge-con">−</span> Kostenintensiv</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Die wichtigsten Kryptowährungen erklärt</div>
+    <div class="s-card"><div class="s-card-title">₿ Bitcoin (BTC) — Das digitale Gold</div><div class="s-text"><p>Wie Gold im Tresor — zahlt keine Zinsen, dient als Wertaufbewahrung. Knapp, dezentral, unabhängig von Staaten. Als Absicherung gegen Inflation wenn Vertrauen in klassische Währungen sinkt.</p></div></div>
+    <div class="s-card"><div class="s-card-title">Ξ Ethereum (ETH) — Das Betriebssystem</div><div class="s-text"><p>Ethereum ist wie das „Windows“ der Blockchain-Welt. <strong>Wichtig: Ethereum ≠ Ether.</strong> Ethereum = Plattform (wie das Auto), Ether = Treibstoff (wie Benzin). Fast alle Tokenisierungen laufen über Ethereum. Ethereum hält ~16,4 Mrd. USD an tokenisierten RWAs (~54% Marktanteil). Beispiele: BlackRock (BUIDL), Franklin Templeton (BENJI), Ondo Finance.</p></div></div>
+    <div class="s-card"><div class="s-card-title">XRP (Ripple) — Die Brückenwährung</div><div class="s-text"><p>XRP ist wie ein Blitzüberweisungssystem zwischen Banken — günstiger als SWIFT. Stärke bei internationalen Zahlungen über Ländergrenzen (Europa → Asien, Afrika). <strong>Innerhalb Europas macht XRP wenig Sinn</strong> — SEPA Instant erledigt das bereits in Sekunden. Stablecoin RLUSD mit 1,76 Mrd. USD Umlaufmenge stärkt das Netzwerk.</p></div></div>
+    <div class="s-card"><div class="s-card-title">🏦 Canton Network — Das institutionelle Backbone</div><div class="s-text"><p>Verwaltet über 336 Mrd. USD an RWAs (85% Marktanteil institutionell). Infrastruktur für Banken und Fonds — nicht für Retail. Ethereum und Canton entwickeln sich nebeneinander, nicht gegeneinander.</p></div></div>
+    <table class="s-table" style="margin-top:10px"><thead><tr><th>Kriterium</th><th>Ethereum (öffentlich)</th><th>Canton (institutionell)</th></tr></thead><tbody>
+      <tr><td>Marktvolumen 2026</td><td>~16,4 Mrd. USD RWAs</td><td>~336 Mrd. USD RWAs</td></tr>
+      <tr><td>Nutzerbasis</td><td>Retail und Institutionen</td><td>Nur Banken und Fonds</td></tr>
+      <tr><td>Vorteile</td><td><span class="s-badge-pro">+</span> Frei handelbar, liquide, offen</td><td><span class="s-badge-pro">+</span> Reguliert, kontrolliert, Privacy</td></tr>
+      <tr><td>Nachteile</td><td><span class="s-badge-con">−</span> Volatilität, Gebühren</td><td><span class="s-badge-con">−</span> Nicht frei handelbar</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Layer-2 Kryptowährungen erklärt</div>
+    <div class="s-card"><div class="s-text"><p><strong>Was ist Layer-2?</strong> Layer-1 = Hauptnetzwerk (Ethereum, Bitcoin). Layer-2 = Zusatzschicht die Transaktionen bündelt und günstig verarbeitet. Wie eine Schnellstraße neben der überfüllten Autobahn.</p><p>Ethereum schafft nur ~15 Transaktionen pro Sekunde — Layer-2 kann Tausende abwickeln. Gebühren auf Layer-2 oft nur Bruchteile von Cent statt mehrere Dollar.</p></div></div>
+    <table class="s-table"><thead><tr><th>Layer-2 Projekt</th><th>Typ</th><th>Nutzen</th></tr></thead><tbody>
+      <tr><td>Arbitrum</td><td>Optimistic Rollup</td><td>Sehr günstige Transaktionen, beliebt für DeFi</td></tr>
+      <tr><td>Optimism</td><td>Optimistic Rollup</td><td>Skalierung für Ethereum-Apps</td></tr>
+      <tr><td>Polygon</td><td>Sidechain / Rollup</td><td>Große Nutzerbasis, viele Partnerschaften</td></tr>
+      <tr><td>zkSync</td><td>Zero-Knowledge Rollup</td><td>Sehr schnelle, sichere Transaktionen</td></tr>
+      <tr><td>Lightning Network</td><td>Payment Channel (Bitcoin)</td><td>Sofortige, günstige Bitcoin-Zahlungen</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Stablecoins — Wettbewerb und Zukunft</div>
+    <div class="s-card"><div class="s-text"><p><strong>XRP vs. RLUSD:</strong> XRP ist die Kryptowährung (Wert schwankt, Brückenfunktion). RLUSD ist der Stablecoin (1:1 an USD gekoppelt, stabil). XRP = Schnellzug, RLUSD = Fahrgäste mit festen Tickets.</p></div></div>
+    <table class="s-table"><thead><tr><th>Stablecoin</th><th>Stärken</th><th>Schwächen</th></tr></thead><tbody>
+      <tr><td>USDT (Tether)</td><td>Größter Stablecoin, hohe Liquidität</td><td>Transparenz der Reserven kritisiert</td></tr>
+      <tr><td>USDC (Circle)</td><td>Reguliert, institutionell sehr beliebt</td><td>Abhängig von US-Regulierung</td></tr>
+      <tr><td>RLUSD (Ripple)</td><td>Wächst stark im Ripple-Ökosystem</td><td>Noch kleiner als Marktführer</td></tr>
+      <tr><td>DAI (MakerDAO)</td><td>Dezentral, durch Krypto besichert</td><td>Komplexer, weniger liquide</td></tr>
+      <tr><td>CBDCs (dig. Euro)</td><td>Staatlich gesichert</td><td>Noch in Entwicklung</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Weitere Krypto-Kategorien</div>
+    <table class="s-table"><thead><tr><th>Kategorie</th><th>Beispiele</th><th>Nutzen im Alltag</th></tr></thead><tbody>
+      <tr><td>Wertspeicher</td><td>Bitcoin</td><td>Inflationsschutz, Referenzwert</td></tr>
+      <tr><td>Smart Contracts</td><td>Ethereum, Solana</td><td>Tokenisierung, DeFi, Apps</td></tr>
+      <tr><td>Skalierung</td><td>Polygon, Arbitrum, Optimism, zkSync</td><td>Schnelle und günstige Transaktionen</td></tr>
+      <tr><td>Zahlungen</td><td>USDC, USDT, RLUSD</td><td>Preisstabil, global nutzbar</td></tr>
+      <tr><td>DeFi und Tokenisierung</td><td>Aave, MakerDAO, Ondo Finance</td><td>Kredite, Zinsen ohne Banken</td></tr>
+      <tr><td>Gaming / NFTs</td><td>Immutable X, Sandbox</td><td>Digitale Güter und Spiele</td></tr>
+      <tr><td>Privacy Coins</td><td>Monero, Zcash</td><td>Anonyme Zahlungen</td></tr>
+    </tbody></table>
+  </div>
+
+  <div style="font-size:11px;color:var(--tx3);margin-top:16px;padding-top:12px;border-top:1px solid var(--bd)">Analysestand: 24.06.2026 · Quelle: Eigene Analyse (Christof Schneider)</div>
+
+</div>
+<div style="display:none" id="da-abnb-content">
+
+  <div class="s-h1">Airbnb, Inc. (ABNB) — Tiefenanalyse</div>
+  <div class="s-sub">Umfassende Analyse des Geschäftsmodells, Wettbewerbs, Finanzkennzahlen und Zukunftsstrategie</div>
+  <div style="font-size:11px;color:var(--tx3);margin-bottom:20px;">Analysestand: 24.06.2026</div>
+
+  <div class="s-section"><div class="s-section-title">Das Geschäftsmodell — Der digitale Vermittler</div>
+    <div class="s-card"><div class="s-text"><p>Airbnb betreibt selbst keine Hotels oder Ferienwohnungen. Das Unternehmen nutzt ein <strong>Asset-Light-Geschäftsmodell</strong> — es fungiert als digitaler zweiseitiger Marktplatz, der private und gewerbliche Gastgeber (Hosts) mit Reisenden (Guests) zusammenbringt.</p><p><strong>Das Kernprinzip: Umsatz durch Servicegebühren</strong><br>Vom Gastgeber: ca. 3% des Buchungspreises. Vom Gast: meist unter 14,2% des Buchungswertes. Dieser Asset-Light-Ansatz macht das Geschäftsmodell extrem kapitaleffizient.</p></div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Die 3 Kernsegmente</div>
+    <div class="s-card"><div class="s-card-title">1. Unterkünfte (Accommodations) — Das Hauptsegment</div><div class="s-text"><p>Das fundamentale Kerngeschäft, schätzungsweise über 95% des Umsatzes. Im Jahr 2025 wurden 507 Millionen Übernachtungen gebucht. ADR weltweit bei rund 173 USD.</p><p><strong>Beispiele:</strong><br>• <em>Zimmer (Private Rooms):</em> Ein Student in Berlin vermietet während der Semesterferien sein WG-Zimmer an einen Wochenendtouristen.<br>• <em>Gesamte Unterkunft (Entire Homes):</em> Eine Familie aus München vermietet ihr Einfamilienhaus für zwei Wochen im Sommer.<br>• <em>Besondere Unterkünfte:</em> Ein Winzer in der Toskana bietet ein ausgebautes Baumhaus auf seinem Weinberg an.</p></div></div>
+    <div class="s-card"><div class="s-card-title">2. Airbnb Erlebnisse (Experiences) — Das Erlebnissegment</div><div class="s-text"><p>Erweitert das Reisen vom reinen Übernachten hin zu Aktivitäten. Lokale Experten bieten kostenpflichtige Aktivitäten an. Airbnb behält eine höhere Kommission (rund 20%). Geringeres Buchungsvolumen, aber deutlich höhere Take-Rate als Unterkünfte.</p><p><strong>Beispiele:</strong><br>• Ein Koch in Tokio bietet einen dreistündigen Sushi-Zubereitungskurs für maximal vier Touristen an.<br>• Ein Historiker aus Edinburgh führt eine virtuelle Tour durch die Geistergeschichten Schottlands.</p></div></div>
+    <div class="s-card"><div class="s-card-title">3. Airbnb Icons — Das Marketing-Premiumprodukt</div><div class="s-text"><p>2024 eingeführtes Segment, verbindet reale Unterkünfte mit Popkultur, Film und Musik. Dient primär als massives Marketinginstrument. Beispiel: Ein Nachbau des Hauses aus dem Pixar-Film wurde für wenige Nächte in New Mexico zur Buchung freigegeben.</p><p><strong>Finanzielle Bedeutung:</strong> Generiert kaum direkten Umsatz, aber enormen Marketingwert — zieht Millionen Menschen auf die App, die dann reguläre Unterkünfte buchen.</p></div></div>
+    <div class="s-card"><div class="s-card-title">Warum funktioniert dieses Modell? — Der Netzwerkeffekt</div><div class="s-text"><p>Je mehr Gastgeber einzigartige Unterkünfte anbieten, desto mehr Gäste nutzen die App. Je mehr Gäste suchen, desto attraktiver wird es für neue Gastgeber. Airbnb muss im Verhältnis zu traditionellen Hotelketten kaum Geld für physische Infrastruktur ausgeben.</p></div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Geografische Umsatzverteilung (FY 2025)</div>
+    <table class="s-table"><thead><tr><th>Region</th><th>Charakteristik</th><th>Wachstum</th></tr></thead><tbody>
+      <tr><td>Nordamerika</td><td>Reifster Markt mit den höchsten Tagesraten (ADR)</td><td>Stabil</td></tr>
+      <tr><td>EMEA (Europa, Nahost, Afrika)</td><td>Starker klassischer Städtetourismus</td><td><span class="s-badge-pro">+14% YoY</span></td></tr>
+      <tr><td>Lateinamerika</td><td>Am schnellsten wachsender Markt</td><td><span class="s-badge-pro">+20% YoY</span></td></tr>
+      <tr><td>Asien-Pazifik</td><td>Erholt sich durch asiatischen Auslandstourismus</td><td>Schrittweise</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Wettbewerb — Stärken und Schwächen</div>
+    <table class="s-table"><thead><tr><th>Kriterium</th><th>Airbnb</th><th>Booking Holdings</th><th>Expedia/Vrbo</th></tr></thead><tbody>
+      <tr><td>Markenbekanntheit</td><td><span class="s-badge-pro">Verb geworden, organisch</span></td><td>Global stark</td><td>Solide USA</td></tr>
+      <tr><td>Marketing-Kosten</td><td><span class="s-badge-pro">90% Traffic organisch</span></td><td><span class="s-badge-con">Milliarden Google Ads</span></td><td>Hoch</td></tr>
+      <tr><td>Unterkunftstypen</td><td><span class="s-badge-pro">Einzigartig, Baumhäuser, Burgen</span></td><td>Hauptsächlich Hotels</td><td>Ferienhäuser Familien</td></tr>
+      <tr><td>Regulierungsrisiko</td><td><span class="s-badge-con">Hoch (NYC, Barcelona)</span></td><td>Gering (Hotels lizenziert)</td><td>Mittel</td></tr>
+      <tr><td>Komplettreise</td><td><span class="s-badge-con">Nur Unterkunft (bisher)</span></td><td><span class="s-badge-pro">Flug, Hotel, Mietwagen</span></td><td>Mittel</td></tr>
+      <tr><td>Qualitätsstandard</td><td><span class="s-badge-con">Inkonsistent</span></td><td>Standardisiert</td><td>Standardisiert</td></tr>
+    </tbody></table>
+    <div class="s-card" style="margin-top:10px"><div class="s-card-title">Was kann Airbnb BESSER als die Konkurrenz?</div><div class="s-text"><ul style="padding-left:16px;line-height:1.9"><li><strong>Die Marke als Verb:</strong> Menschen sagen „ich airbnbe“ — über 90% des Traffics fließt organisch ohne bezahlte Werbung. Booking und Expedia müssen jährlich Milliarden für Google-Anzeigen ausgeben.</li><li><strong>Einzigartigkeit des Portfolios:</strong> Baumhäuser, Burgen, Weinberge — auf klassischen Hotelportalen nicht vorhanden.</li><li><strong>Vertrauen:</strong> Das zweiseitige Bewertungssystem schafft hohe soziale Kontrolle für beide Seiten.</li><li><strong>Höhere Kundenbindung bei Jüngeren:</strong> Generationen Y und Z präferieren individuelle Erlebnisse gegenüber standardisierten Hotelzimmern.</li></ul></div></div>
+    <div class="s-card"><div class="s-card-title">Was kann Airbnb SCHLECHTER als die Konkurrenz?</div><div class="s-text"><ul style="padding-left:16px;line-height:1.9"><li><strong>Regulierungsanfälligkeit:</strong> Strikte Gesetze in NYC, Barcelona, Amsterdam beschneiden das Wachstumspotenzial abrupt.</li><li><strong>Qualitätsinkonsistenz:</strong> Versteckte Mängel, komplizierter Check-in, kurzfristige Absagen durch Hosts.</li><li><strong>Gebührentransparenz:</strong> Endpreise inklusive Reinigungsgebühren wirken intransparent im Vergleich zu Festpreisen bei Hotels.</li><li><strong>Fehlendes Komplettangebot:</strong> Booking bietet Flüge, Mietwagen, Taxis und Hotels aus einer Hand.</li></ul></div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Finanzkennzahlen 2021–2025</div>
+    <table class="s-table"><thead><tr><th>Jahr</th><th>Umsatz (Mrd. USD)</th><th>Nettogewinn (Mrd. USD)</th><th>FCF (Mrd. USD)</th></tr></thead><tbody>
+      <tr><td>2021</td><td>5,99</td><td>-0,35</td><td>0,80</td></tr>
+      <tr><td>2022</td><td>8,40</td><td>1,89</td><td>2,64</td></tr>
+      <tr><td>2023</td><td>9,92</td><td>4,79</td><td>2,87</td></tr>
+      <tr><td>2024</td><td>11,10</td><td>2,65</td><td>3,15</td></tr>
+      <tr><td>2025</td><td>12,24</td><td>2,51</td><td>3,54</td></tr>
+    </tbody></table>
+    <div class="s-card" style="margin-top:10px"><div class="s-card-title">Bewertungsmultiplikatoren (Mitte 2026)</div><div class="s-text"><p><strong>KGV ~35x</strong> — Faire Prämie für Marktführerschaft. Leicht über dem Niveau von 2024 (31,1x).</p><p><strong>KUV:</strong> Sinkt seit Jahren kontinuierlich (2021: 13,7x) — die Aktie wird fundamental günstiger.</p><p><strong>FCF-Marge: 28,9%</strong> (3,54 Mrd. USD FCF auf 12,24 Mrd. USD Umsatz) — strukturell deutlich profitabler als die GuV ausweist.</p><p><strong>Nettorendite: ~20%</strong> — Jeder fünfte eingenommene Dollar bleibt als reiner Gewinn.</p></div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Direktvergleich: Airbnb vs. Booking Holdings (FY 2025)</div>
+    <table class="s-table"><thead><tr><th>Kennzahl</th><th>Airbnb (ABNB)</th><th>Booking Holdings (BKNG)</th></tr></thead><tbody>
+      <tr><td>Umsatz</td><td>12,24 Mrd. USD</td><td>&gt;20 Mrd. USD (mehr als doppelt)</td></tr>
+      <tr><td>KGV</td><td>~33,5x</td><td>~22,1x <span class="s-badge-pro">günstiger</span></td></tr>
+      <tr><td>FCF-Marge</td><td><span class="s-badge-pro">~28,9% (höher)</span></td><td>~25%</td></tr>
+      <tr><td>Marketing-Kosten</td><td><span class="s-badge-pro">Gering (organisch)</span></td><td><span class="s-badge-con">Hoch (Google-abhängig)</span></td></tr>
+      <tr><td>Regulierungsrisiko</td><td><span class="s-badge-con">Hoch</span></td><td>Gering</td></tr>
+      <tr><td>Bilanz</td><td>Solide Eigenkapitalbasis</td><td>Negatives EK durch Rückkäufe</td></tr>
+    </tbody></table>
+    <div class="s-card" style="margin-top:10px"><div class="s-card-title">Fazit für Investoren</div><div class="s-text"><p>Investieren Sie in <strong>Airbnb</strong>, wenn Sie an die Stärke einer globalen Lifestyle-Marke glauben und darauf setzen, dass das Management das Regulierungsrisiko durch Langzeitmieten kompensieren kann.</p><p>Investieren Sie in <strong>Booking</strong>, wenn Sie ein klassisches, stabiles Value-Investment im Tourismussektor suchen, das weniger anfällig für politische Verbote ist.</p></div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Zukunftsstrategie des Managements (5 Säulen)</div>
+    <div class="s-card"><div class="s-card-title">1. Vom reinen Vermieter zur umfassenden Reiseplattform</div><div class="s-text"><p>Integration von Flughafentransfers, Mietwagen, Gepäckaufbewahrung und Lebensmittellieferungen direkt in den Buchungsprozess. Neue Kategorien: Boutique-Hotels, Bed &amp; Breakfasts und verifizierte Premium-Unterkünfte.</p></div></div>
+    <div class="s-card"><div class="s-card-title">2. Radikaler Wandel durch KI (AI-First)</div><div class="s-text"><p>Bereits rund 60% des Programmiercodes bei Airbnb werden von KI geschrieben — senkt Kosten pro Buchung drastisch. Geplant ist ein hyper-personalisiertes Such- und Buchungssystem als digitaler Reisebegleiter.</p></div></div>
+    <div class="s-card"><div class="s-card-title">3. Geografische Expansion in Wachstumsmärkte</div><div class="s-text"><p>Fokus auf Brasilien, Japan und Indien — um das Übernachtungswachstum wieder in den zweistelligen Prozentbereich zu treiben.</p></div></div>
+    <div class="s-card"><div class="s-card-title">4. Langzeitmieten &amp; Lifestyle</div><div class="s-text"><p>Buchungen über 28 Tage (für digitale Nomaden und Remote-Worker) werden ausgebaut. Über „Airbnb-Friendly Apartments“ arbeitet das Management direkt mit Immobilienentwicklern zusammen.</p></div></div>
+    <div class="s-card"><div class="s-card-title">5. Das Vertrauens-Flywheel &amp; Großevents</div><div class="s-text"><p>FIFA Fußball-Weltmeisterschaft 2026 in Nordamerika als globaler Hebel — enorme Nachfragewelle da Hotelkapazitäten in den 17 Austragungsstädten knapp sind. Aufbau eines Co-Hosting-Netzwerks.</p></div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Risikoprofil — Was könnte das Modell stoppen?</div>
+    <div class="s-scenario bear"><div class="s-scenario-label">⚠ 1. Die Welle der globalen Regulierung (Der politische Tod)</div><div class="s-text">Wenn der Trend von Einzelverboten (New York, Barcelona) flächendeckend auf mittlere Städte überspringt, bricht das Angebot weg. EU- oder US-weite Gesetze die Kurzzeitvermietungen an teure Hotel-Lizenzen koppeln, würden über Nacht Millionen Inserate vernichten.</div></div>
+    <div class="s-scenario bear"><div class="s-scenario-label">⚠ 2. Das Ende der Gebührenakzeptanz (Der ökonomische Tod)</div><div class="s-text">Wenn Hotels durch Automatisierung ihre Preise dauerhaft senken, wird Airbnb schlicht zu teuer. Sobald Reisende feststellen, dass ein Hotelzimmer günstiger, sauberer und unkomplizierter ist, versiegt der Kundenstrom.</div></div>
+    <div class="s-scenario bear"><div class="s-scenario-label">⚠ 3. Der Verlust der Such-Hoheit an Google (Der technologische Tod)</div><div class="s-text">Aktuell profitiert Airbnb davon, dass 90% der Kunden direkt die App öffnen. Wenn Google Travel so optimiert wird, dass Urlauber direkt dort buchen, wird Airbnb zum reinen Zulieferer herabgestuft.</div></div>
+    <div class="s-scenario bear"><div class="s-scenario-label">⚠ 4. Ein irreparabler Vertrauensbruch (Der soziale Tod)</div><div class="s-text">Das Modell basiert zu 100% auf Vertrauen. Eine Serie von schweren, weltweit medial ausgeschlachteten Sicherheitsvorfällen würde Hosts und Gäste massenhaft zu sicheren Hotelketten treiben.</div></div>
+  </div>
+
+  <div class="s-section"><div class="s-section-title">Szenarioanalyse: Wann ist die Aktie historisch günstig?</div>
+    <div class="s-sub" style="margin-bottom:12px">Aktueller Kurs ~144 USD, EPS ~4,06 USD. Historische KGV-Spanne seit Börsengang: 28x bis 45x.</div>
+    <div class="s-scenario base"><div class="s-scenario-label">📊 Fairmarktige Bewertung (KGV 35x)</div><div class="s-text">Aktienkurs ~144 USD. Unternehmen ist solide bepreist, bietet jedoch wenig Sicherheitsmarge. Das aktuelle Niveau.</div></div>
+    <div class="s-scenario bull"><div class="s-scenario-label">✓ Historisch günstig (KGV 28x)</div><div class="s-text">Aktienkurs ~113,60 USD. Nahe dem 52-Wochen-Tief (110,81 USD). Ab hier ist die Aktie fundamental historisch günstig und bietet eine starke Sicherheitsmarge.</div></div>
+    <div class="s-scenario bear"><div class="s-scenario-label">⚠ Marktkrise (KGV 22x wie Booking)</div><div class="s-text">Aktienkurs ~89,30 USD. Würde eintreten, wenn das Wachstum temporär komplett stagniert und Airbnb auf das Bewertungsniveau von Booking herabgestuft wird.</div></div>
+  </div>
+
+  <div style="font-size:11px;color:var(--tx3);margin-top:16px;padding-top:12px;border-top:1px solid var(--bd)">Analysestand: 24.06.2026 · Quelle: Eigene Analyse (Christof Schneider)</div>
+
+</div>
+
+<script>
+var sectorData = {};
+var deepData = {};
+
+function initContent() {
+  var c = document.getElementById('da-crypto-content');
+  if (c) sectorData['crypto'] = { label: '&#8383; Crypto', html: c.innerHTML };
+  var a = document.getElementById('da-abnb-content');
+  if (a) deepData['abnb'] = { label: '&#9992; Airbnb (ABNB)', html: a.innerHTML };
+  // Show defaults
+  showSector('crypto');
+  showDeep('abnb');
+}
+
+function switchView(id) {
+  document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('on'); });
+  document.querySelectorAll('.nav-tab').forEach(function(t){ t.classList.remove('on'); });
+  document.getElementById('view-' + id).classList.add('on');
+  event.currentTarget.classList.add('on');
+}
+
+function switchSector(id, el) {
+  document.querySelectorAll('#sector-tabs .stab[data-id]').forEach(function(t){ t.classList.remove('on'); });
+  if (el) el.classList.add('on');
+  showSector(id);
+}
+
+function showSector(id) {
+  var d = sectorData[id];
+  document.getElementById('sector-content').innerHTML = d ? d.html : '';
+}
+
+function switchDeep(id, el) {
+  document.querySelectorAll('#deep-tabs .stab[data-id]').forEach(function(t){ t.classList.remove('on'); });
+  if (el) el.classList.add('on');
+  showDeep(id);
+}
+
+function showDeep(id) {
+  var d = deepData[id];
+  document.getElementById('deep-content').innerHTML = d ? d.html : '';
+}
+
+function handleUpload(event, area) {
+  var file = event.target.files[0];
+  if (!file) return;
+  var name = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var text = e.target.result;
+    // Clean up text
+    text = text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+    // Remove lines with only special chars (Word artifacts)
+    var lines = text.split('\n').filter(function(l){
+      return l.trim().length > 2 && !/^[\x00-\x1F\xA0%+\-\/=]{3,}$/.test(l.trim());
+    });
+    // Format as readable HTML
+    var html = formatUploadedText(lines, name);
+    var id = 'upload_' + Date.now();
+    var label = name.substring(0, 30);
+    if (area === 'sector') {
+      sectorData[id] = { label: label, html: html };
+      addTab('sector-tabs', id, label, 'sector');
+      switchSector(id, document.querySelector('#sector-tabs .stab[data-id="' + id + '"]'));
+    } else {
+      deepData[id] = { label: label, html: html };
+      addTab('deep-tabs', id, label, 'deep');
+      switchDeep(id, document.querySelector('#deep-tabs .stab[data-id="' + id + '"]'));
+    }
+  };
+  reader.readAsText(file, 'utf-8');
+  event.target.value = '';
+}
+
+function formatUploadedText(lines, title) {
+  var html = '<div class="s-h1">' + escHtml(title) + '</div>';
+  var currentSection = '';
+  var currentItems = [];
+
+  function flushSection() {
+    if (!currentSection && currentItems.length === 0) return;
+    if (currentSection) {
+      html += '<div class="s-section"><div class="s-section-title">' + escHtml(currentSection) + '</div><div class="s-card"><div class="s-text">';
+    } else {
+      html += '<div class="s-card"><div class="s-text">';
+    }
+    currentItems.forEach(function(item) {
+      html += '<p>' + escHtml(item) + '</p>';
+    });
+    html += '</div></div>';
+    if (currentSection) html += '</div>';
+    currentSection = '';
+    currentItems = [];
+  }
+
+  lines.forEach(function(line) {
+    var l = line.trim();
+    if (!l) return;
+    // Detect section headers: short lines, possibly all-caps or ending with :
+    var isHeader = (l.length < 80 && (
+      /^[A-ZÀ-Ü\s\d\.\-\:]{5,}$/.test(l) ||
+      /^\d+[\.\)]\s/.test(l) ||
+      (l.endsWith(':') && l.length < 60) ||
+      l === l.toUpperCase() && l.length > 4
+    ));
+    if (isHeader) {
+      flushSection();
+      currentSection = l.replace(/:$/, '');
+    } else {
+      currentItems.push(l);
+    }
+  });
+  flushSection();
+  var now = new Date().toLocaleDateString('de-DE', {day:'2-digit',month:'2-digit',year:'numeric'});
+  html += '<div style="font-size:11px;color:var(--tx3);margin-top:16px;padding-top:12px;border-top:1px solid var(--bd)">Hochgeladen: ' + now + '</div>';
+  return html;
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function addTab(containerId, id, label, area) {
+  var container = document.getElementById(containerId);
+  var plusLabel = container.querySelector('label.stab');
+  var btn = document.createElement('button');
+  btn.className = 'stab';
+  btn.setAttribute('data-id', id);
+  btn.innerHTML = escHtml(label.substring(0,25)) + '<span class="stab-del" onclick="delTab(event,\'' + id + '\',\'' + area + '\')">&#10005;</span>';
+  btn.onclick = function() {
+    if (area === 'sector') switchSector(id, btn);
+    else switchDeep(id, btn);
+  };
+  container.insertBefore(btn, plusLabel);
+}
+
+function delTab(event, id, area) {
+  event.stopPropagation();
+  if (!confirm('Analyse entfernen?')) return;
+  if (area === 'sector') {
+    delete sectorData[id];
+    var btn = document.querySelector('#sector-tabs .stab[data-id="' + id + '"]');
+    if (btn) btn.remove();
+    // Show first available
+    var first = document.querySelector('#sector-tabs .stab[data-id]');
+    if (first) { first.classList.add('on'); showSector(first.getAttribute('data-id')); }
+    else document.getElementById('sector-content').innerHTML = '<div class="empty-state"><div class="empty-state-icon">&#128202;</div><h3>Keine Analyse vorhanden</h3><p>Klicke auf &ldquo;+ Neue Analyse&rdquo; um eine Datei hochzuladen.</p></div>';
+  } else {
+    delete deepData[id];
+    var btn2 = document.querySelector('#deep-tabs .stab[data-id="' + id + '"]');
+    if (btn2) btn2.remove();
+    var first2 = document.querySelector('#deep-tabs .stab[data-id]');
+    if (first2) { first2.classList.add('on'); showDeep(first2.getAttribute('data-id')); }
+    else document.getElementById('deep-content').innerHTML = '<div class="empty-state"><div class="empty-state-icon">&#128302;</div><h3>Keine Aktienanalyse vorhanden</h3><p>Klicke auf &ldquo;+ Neue Analyse&rdquo; um eine Datei hochzuladen.</p></div>';
+  }
+}
+
+// Drag & drop support for upload labels
+document.addEventListener('DOMContentLoaded', function() {
+  initContent();
+});
+</script>
+
+</body></html>
